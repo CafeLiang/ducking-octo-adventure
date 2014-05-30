@@ -9,7 +9,7 @@ Background: movies have been added to database
   Given the following movies exist:
   | title                   | rating | release_date |
   | Aladdin                 | G      | 25-Nov-1992  |
-  | The Terminators          | R      | 26-Oct-1984  |
+  | The Terminator          | R      | 26-Oct-1984  |
   | When Harry Met Sally    | R      | 21-Jul-1989  |
   | The Help                | PG-13  | 10-Aug-2011  |
   | Chocolat                | PG-13  | 5-Jan-2001   |
@@ -23,10 +23,24 @@ Background: movies have been added to database
 
 Scenario: restrict to movies with 'PG' or 'R' ratings
   # enter step(s) to check the 'PG' and 'R' checkboxes
+  When I check the following ratings: PG, R
   # enter step(s) to uncheck all other checkboxes
+  And I uncheck the following ratings: PG-13, G
   # enter step to "submit" the search form on the homepage
+  And I press "Refresh"
   # enter step(s) to ensure that PG and R movies are visible
+  Then I should see "The Terminator"
+  And I should see "When Harry Met Sally"
+  And I should see "Amelie"
+  And I should see "The Incredibles"
+  And I should see "Raiders of the Lost Ark"  
+
   # enter step(s) to ensure that other movies are not visible
+  And I should not see "Aladdin"
+  And I should not see "The Help"
+  And I should not see "Chocolat"
+  And I should not see "2001: A Space Odyssey"
+  And I should not see "Chicken Run"
 
 Scenario: all ratings selected
   # see assignment
