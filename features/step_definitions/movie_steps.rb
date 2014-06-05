@@ -17,7 +17,7 @@ Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  page.body is the entire content of the page as a string.
 
   page.body.index(e1).should < page.body.index(e2)
-
+  #page.body =~ /#{e1}.*#{e2}/
   #flunk "Unimplemented"
 end
 
@@ -48,3 +48,5 @@ Then /I should see all the movies/ do
 
   #flunk "Unimplemented"
 end
+
+
