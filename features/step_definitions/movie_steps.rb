@@ -1,5 +1,4 @@
 # Add a declarative step here for populating the DB with movies.
-
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     Movie.create!(movie)
@@ -32,18 +31,24 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   ratings = rating_list.split(', ')
 
   ratings.each do |rating|
-    steps %Q{
-      When I #{uncheck}check "ratings[#{rating}]"
-    }
+    steps %Q{When I #{uncheck}check "ratings[#{rating}]"}
     end 
-  
-
 #  flunk "Unimplemented"
 end
 
-Then /I should see all the movies/ do
+Then /I should( not)? see all the movies in ratings: (.*)/ do |shouldnt, rating_list|
+  ratings = rating_list.split(', ')
+  ratings.each do |rating|
+    Movie.where('rating' => rating).each do |movie|
+      steps %Q{Then I should#{shouldnt} see "#{movie[:title]}"}
+    end
+  end
+end
+
+Then /I should see all the movies$/ do
   # Make sure that all the movies in the app are visible in the table
- page.all('table#movies tbody tr').count.should == 10
+ page.all('table#movies tbody tr').count.should == Movie.count
+
 #page.should have_css('table#movies tbody tr', :count=> 10)
 
   #flunk "Unimplemented"
